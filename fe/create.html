@@ -35,28 +35,29 @@
 
         $('#simpan').click(function () {
             // ambil semua data dari form
-            var payload = {
-                nim: $('#a').val(),
-                nama: $('#b').val(),
-                hp: $('#c').val(),
-                alamat: $('#d').val(),
-            };
-
+            const a = $('#a').val();
+            const b = $('#b').val();
+            const c = $('#c').val();
+            const d = $('#d').val();
+            
             // membuat data dalama format api
             $.ajax({
                 url: 'http://localhost:800/www/2526_ganjil/23_25_pbp_befe/be/create.php',
-                type: "POST",
+                type: "GET",
                 contentType: "application/json",
-                data: JSON.stringify({payload}),
+                data: JSON.stringify({
+                    nama: b,
+                    nim: a,
+                    hp: c,
+                    alamat: d,
+                }),
                 success: function (response) {
                     alert('sukses');
                     console.log('success');
-
                 },
                 error: function (xhr, status, error) {
                     alert('gagal')
                     console.log('error');
-
                 }
             });
 

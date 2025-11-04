@@ -1,36 +1,46 @@
 <?php
-$requestBody = file_get_contents('php://input');
-$data = json_decode($requestBody, true);
-var_dump($data);
+// validasi cek method
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['status' => 'error', 'message' => 'Method Salah !']);
+    exit;
+}
+
+//Mempersiapkan datanya dan variabel $data 
+header("Content-Type: application/json; charset=UTF-8");
+$input = file_get_contents("php://input");
+$data = json_decode($input, true);
+
+// validasi error
 $errors = [];
-if (!isset($_POST['nim'])) {
+if (!isset($data['nim'])) {
     $errors['nim'] = "Data NIM tidak ada";
 } else {
-    if ($_POST['nim'] == '') {
+    if ($data['nim'] == '') {
         $errors['nim'] = "Data NIM tidak boleh kosong";
     }
 }
 
-if (!isset($_POST['nama'])) {
+if (!isset($data['nama'])) {
     $errors['nama'] = "Data NAMA tidak ada";
 } else {
-    if ($_POST['nama'] == '') {
+    if ($data['nama'] == '') {
         $errors['nama'] = "Data NAMA tidak boleh kosong";
     }
 }
 
-if (!isset($_POST['hp'])) {
+if (!isset($data['hp'])) {
     $errors['hp'] = "Data HP tidak ada";
 } else {
-    if ($_POST['hp'] == '') {
+    if ($data['hp'] == '') {
         $errors['hp'] = "Data HP tidak boleh kosong";
     }
 }
 
-if (!isset($_POST['alamat'])) {
+if (!isset($data['alamat'])) {
     $errors['alamat'] = "Data ALAMAT tidak ada";
 } else {
-    if ($_POST['alamat'] == '') {
+    if ($data['alamat'] == '') {
         $errors['alamat'] = "Data alamat tidak boleh kosong";
     }
 }
@@ -40,10 +50,10 @@ if (count($errors) == 0) {
     // $koneksi = mysqli_connect('localhost', 'root','', 'PBP_PAGIA');
     $koneksi = new mysqli('localhost', 'root','', 'PBP_PAGIA');
     // insert
-    $nim = $_POST['nim'];
-    $nama = $_POST['nama'];
-    $hp = $_POST['hp'];
-    $alamat = $_POST['alamat'];
+    $nim = $data['nim'];
+    $nama = $data['nama'];
+    $hp = $data['hp'];
+    $alamat = $data['alamat'];
     $q = "INSERT INTO mahasiswa (nim, nama, hp, alamat) VALUES('$nim','$nama','$hp','$alamat')";
     // mysqli_query($koneksi, $q);
     $koneksi->query($q);
@@ -52,10 +62,10 @@ if (count($errors) == 0) {
         'msg' => 'Data baru berhasil dibuat',
         'data' => [
             'id' => $koneksi->insert_id,
-            'nim' => $_POST['nim'],
-            'nama' => $_POST['nama'],
-            'hp' => $_POST['hp'],
-            'alamat' => $_POST['alamat'],
+            'nim' => $data['nim'],
+            'nama' => $data['nama'],
+            'hp' => $data['hp'],
+            'alamat' => $data['alamat'],
         ]
     ];
 } else {
@@ -67,5 +77,4 @@ if (count($errors) == 0) {
     http_response_code(400);
 }
 
-header('Content-Type: application/json');
 echo json_encode($dataResponse);
