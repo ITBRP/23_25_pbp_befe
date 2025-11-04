@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="assets/jquery-3.7.1.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Form input data mahasiswa</h2>
+
+    <div id="form">
+        <div>
+            <label for="">NIM</label>
+            <input type="text" id="a">
+        </div>
+        <div>
+            <label for="">Nama</label>
+            <input type="text" id="b">
+        </div>
+        <div>
+            <label for="">HP</label>
+            <input type="text" id="c">
+        </div>
+        <div>
+            <label for="">Alamat</label>
+            <input type="text" id="d">
+        </div>
+    </div>
+    <button type="button" id="simpan">Simpan</button>
+
+    <script>
+
+        $('#simpan').click(function () {
+            // ambil semua data dari form
+            var payload = {
+                nim: $('#a').val(),
+                nama: $('#b').val(),
+                hp: $('#c').val(),
+                alamat: $('#d').val(),
+            };
+
+            // membuat data dalama format api
+            $.ajax({
+                url: 'http://localhost:800/www/2526_ganjil/23_25_pbp_befe/be/create.php',
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({payload}),
+                success: function (response) {
+                    alert('sukses');
+                    console.log('success');
+
+                },
+                error: function (xhr, status, error) {
+                    alert('gagal')
+                    console.log('error');
+
+                }
+            });
+
+        });
+
+    </script>
+</body>
+
+</html>
