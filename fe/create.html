@@ -1,69 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+<form id="studentForm">
+    <input type="text" name="nama" placeholder="Masukkan nama"><br>
+    <span class="error nama" style="color: red;"></span><br>
+    <input type="text" name="nim" placeholder="Masukkan NIM"><br>
+    <span class="error nim" style="color: red;"></span><br>
+    <button type="submit">Kirim</button>
+</form>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="assets/jquery-3.7.1.min.js"></script>
-    <title>Document</title>
-</head>
-
-<body>
-    <h2>Form input data mahasiswa</h2>
-
-    <div id="form">
-        <div>
-            <label for="">NIM</label>
-            <input type="text" id="a">
-        </div>
-        <div>
-            <label for="">Nama</label>
-            <input type="text" id="b">
-        </div>
-        <div>
-            <label for="">HP</label>
-            <input type="text" id="c">
-        </div>
-        <div>
-            <label for="">Alamat</label>
-            <input type="text" id="d">
-        </div>
-    </div>
-    <button type="button" id="simpan">Simpan</button>
-
-    <script>
-
-        $('#simpan').click(function () {
-            // ambil semua data dari form
-            const a = $('#a').val();
-            const b = $('#b').val();
-            const c = $('#c').val();
-            const d = $('#d').val();
-            
-            // membuat data dalama format api
-            $.ajax({
-                url: 'http://localhost:800/www/2526_ganjil/23_25_pbp_befe/be/create.php',
-                type: "GET",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    nama: b,
-                    nim: a,
-                    hp: c,
-                    alamat: d,
-                }),
-                success: function (response) {
-                    alert('sukses');
-                    console.log('success');
-                },
-                error: function (xhr, status, error) {
-                    alert('gagal')
-                    console.log('error');
-                }
-            });
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $('#studentForm').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        
+        $.ajax({
+            url: 'http://localhost:800/www/2526_ganjil/25pbp_23pagia/be/create.php', // ganti sesuai endpoint API kamu
+            type: 'POST',
+            data: formData,
+            processData: false, // biarkan browser kirim apa adanya (FormData)
+            contentType: false, // biarkan header otomatis
+            beforeSend: function () {
+                console.log('Mengirim data...');
+            },
+            success: function (res) {
+                alert(res.status);
+            },
+            error: function (xhr, responseText) {
+                res = JSON.parse(xhr.responseText);
+                Object.entries(res.errors).forEach(([key, msg]) => {
+                    $(`.error.${key}`).text(msg); // isi ke span.error.[key]
+                });
+            }
         });
-
-    </script>
-</body>
-
-</html>
+    });
+</script>
