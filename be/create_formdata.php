@@ -87,7 +87,7 @@ if ($anyPhoto) {
 
 // NULL jika tidak upload file
 $q = "INSERT INTO mahasiswa(nim, nama, hp, photo) 
-      VALUES ('$nim', '$nama', '$hp', " . ($namaPhoto ? "'$namaPhoto'" : "NULL") . ")";
+      VALUES ($nim, '$nama', '$hp', " . ($namaPhoto ? "'$namaPhoto'" : "NULL") . ")";
 
 
 $koneksi->query($q);
