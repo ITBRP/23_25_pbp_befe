@@ -45,14 +45,8 @@ $namaPhoto = '';
 $fileExt = '';
 if (isset($_FILES['photo'])) {
 
-    // Case 1 & 2: FE kirim field photo tapi user tidak memilih file
-    if ($_FILES['photo']['error'] == UPLOAD_ERR_NO_FILE) {
-        // dianggap tidak upload, tidak error
-    }
-
-    // Case 3: User memilih file → harus divalidasi
-    if ($_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-
+    // User memilih file
+    if ($_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
         $allowed = ['jpg', 'jpeg', 'png'];
         $fileName = $_FILES['photo']['name'];
         $fileExt  = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
@@ -63,6 +57,7 @@ if (isset($_FILES['photo'])) {
             $anyPhoto = true; // photo valid, siap disave
         }
     }
+
 }
 
 if (count($errors) > 0) {
